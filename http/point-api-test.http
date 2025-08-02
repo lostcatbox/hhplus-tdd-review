@@ -1,0 +1,90 @@
+### PointController API 테스트
+### 개발 환경 설정
+@baseUrl = http://localhost:8080
+@userId = 1
+@chargeAmount = 1000
+@useAmount = 500
+
+###
+# 1. 특정 유저의 포인트 조회
+GET {{baseUrl}}/point/{{userId}}
+Accept: application/json
+
+###
+# 2. 특정 유저의 포인트 충전/이용 내역 조회
+GET {{baseUrl}}/point/{{userId}}/histories
+Accept: application/json
+
+###
+# 3. 특정 유저의 포인트 충전
+PATCH {{baseUrl}}/point/{{userId}}/charge
+Content-Type: application/json
+
+{{chargeAmount}}
+
+###
+# 4. 특정 유저의 포인트 사용
+PATCH {{baseUrl}}/point/{{userId}}/use
+Content-Type: application/json
+
+{{useAmount}}
+
+###
+# 테스트 시나리오: 포인트 충전 후 조회
+PATCH {{baseUrl}}/point/1/charge
+Content-Type: application/json
+
+2000
+
+###
+# 충전 후 포인트 조회
+GET {{baseUrl}}/point/1
+Accept: application/json
+
+###
+# 포인트 사용 후 조회
+PATCH {{baseUrl}}/point/1/use
+Content-Type: application/json
+
+300
+
+###
+# 사용 후 포인트 조회
+GET {{baseUrl}}/point/1
+Accept: application/json
+
+###
+# 최종 포인트 내역 조회
+GET {{baseUrl}}/point/1/histories
+Accept: application/json
+
+###
+# 다른 유저로 테스트
+GET {{baseUrl}}/point/2
+Accept: application/json
+
+###
+# 다른 유저 포인트 충전
+PATCH {{baseUrl}}/point/2/charge
+Content-Type: application/json
+
+5000
+
+###
+# 다른 유저 포인트 내역 조회
+GET {{baseUrl}}/point/2/histories
+Accept: application/json
+
+###
+# 잘못된 요청 테스트 - 음수 충전 시도
+PATCH {{baseUrl}}/point/1/charge
+Content-Type: application/json
+
+-100
+
+###
+# 잘못된 요청 테스트 - 보유 포인트보다 많은 사용 시도
+PATCH {{baseUrl}}/point/1/use
+Content-Type: application/json
+
+999999 

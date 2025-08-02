@@ -1,0 +1,205 @@
+### PointController API 성능 및 부하 테스트
+### 개발 환경 설정
+@baseUrl = http://localhost:8080
+
+###
+# 성능 테스트 1: 연속적인 포인트 조회 (응답시간 측정)
+GET {{baseUrl}}/point/1
+Accept: application/json
+
+###
+GET {{baseUrl}}/point/1
+Accept: application/json
+
+###
+GET {{baseUrl}}/point/1
+Accept: application/json
+
+###
+GET {{baseUrl}}/point/1
+Accept: application/json
+
+###
+GET {{baseUrl}}/point/1
+Accept: application/json
+
+###
+# 성능 테스트 2: 연속적인 포인트 충전 (동시성 테스트)
+PATCH {{baseUrl}}/point/1/charge
+Content-Type: application/json
+
+100
+
+###
+PATCH {{baseUrl}}/point/1/charge
+Content-Type: application/json
+
+200
+
+###
+PATCH {{baseUrl}}/point/1/charge
+Content-Type: application/json
+
+300
+
+###
+PATCH {{baseUrl}}/point/1/charge
+Content-Type: application/json
+
+400
+
+###
+PATCH {{baseUrl}}/point/1/charge
+Content-Type: application/json
+
+500
+
+###
+# 성능 테스트 3: 충전과 사용의 반복 (트랜잭션 테스트)
+PATCH {{baseUrl}}/point/2/charge
+Content-Type: application/json
+
+1000
+
+###
+PATCH {{baseUrl}}/point/2/use
+Content-Type: application/json
+
+100
+
+###
+PATCH {{baseUrl}}/point/2/charge
+Content-Type: application/json
+
+500
+
+###
+PATCH {{baseUrl}}/point/2/use
+Content-Type: application/json
+
+200
+
+###
+PATCH {{baseUrl}}/point/2/charge
+Content-Type: application/json
+
+800
+
+###
+PATCH {{baseUrl}}/point/2/use
+Content-Type: application/json
+
+150
+
+###
+# 성능 테스트 4: 다양한 유저에 대한 동시 요청
+GET {{baseUrl}}/point/1
+Accept: application/json
+
+###
+GET {{baseUrl}}/point/2
+Accept: application/json
+
+###
+GET {{baseUrl}}/point/3
+Accept: application/json
+
+###
+GET {{baseUrl}}/point/4
+Accept: application/json
+
+###
+GET {{baseUrl}}/point/5
+Accept: application/json
+
+###
+# 성능 테스트 5: 내역 조회 성능 테스트
+GET {{baseUrl}}/point/1/histories
+Accept: application/json
+
+###
+GET {{baseUrl}}/point/2/histories
+Accept: application/json
+
+###
+GET {{baseUrl}}/point/3/histories
+Accept: application/json
+
+###
+# 성능 테스트 6: 큰 금액 충전/사용 테스트
+PATCH {{baseUrl}}/point/10/charge
+Content-Type: application/json
+
+1000000
+
+###
+PATCH {{baseUrl}}/point/10/use
+Content-Type: application/json
+
+500000
+
+###
+PATCH {{baseUrl}}/point/10/charge
+Content-Type: application/json
+
+2000000
+
+###
+GET {{baseUrl}}/point/10
+Accept: application/json
+
+###
+GET {{baseUrl}}/point/10/histories
+Accept: application/json
+
+###
+# 성능 테스트 7: 순차적 시나리오 테스트 (실제 사용자 행동 패턴)
+# 1. 사용자 포인트 조회
+GET {{baseUrl}}/point/100
+Accept: application/json
+
+###
+# 2. 포인트 충전
+PATCH {{baseUrl}}/point/100/charge
+Content-Type: application/json
+
+5000
+
+###
+# 3. 충전 후 포인트 확인
+GET {{baseUrl}}/point/100
+Accept: application/json
+
+###
+# 4. 포인트 사용
+PATCH {{baseUrl}}/point/100/use
+Content-Type: application/json
+
+1500
+
+###
+# 5. 사용 후 포인트 확인
+GET {{baseUrl}}/point/100
+Accept: application/json
+
+###
+# 6. 내역 확인
+GET {{baseUrl}}/point/100/histories
+Accept: application/json
+
+###
+# 7. 추가 포인트 사용
+PATCH {{baseUrl}}/point/100/use
+Content-Type: application/json
+
+2000
+
+###
+# 8. 최종 포인트 확인
+GET {{baseUrl}}/point/100
+Accept: application/json
+
+###
+# 9. 최종 내역 확인
+GET {{baseUrl}}/point/100/histories
+Accept: application/json 
