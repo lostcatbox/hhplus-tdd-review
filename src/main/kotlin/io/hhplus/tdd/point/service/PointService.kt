@@ -23,6 +23,7 @@ class PointService(
     private val userPointRepository: UserPointRepository,
     private val pointHistoryRepository: PointHistoryRepository,
 ) : PointServiceInterface {
+    @Synchronized
     override fun charge(
         userId: Long,
         amount: Long,
@@ -48,6 +49,7 @@ class PointService(
         return savedUserPoint
     }
 
+    @Synchronized
     override fun use(
         userId: Long,
         amount: Long,
