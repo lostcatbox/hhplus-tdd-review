@@ -1,7 +1,7 @@
-package io.hhplus.tdd.database
+package io.hhplus.tdd.infra.point.database
 
-import io.hhplus.tdd.point.PointHistory
-import io.hhplus.tdd.point.TransactionType
+import io.hhplus.tdd.point.domain.PointHistory
+import io.hhplus.tdd.point.domain.TransactionType
 import org.springframework.stereotype.Component
 
 /**
@@ -19,18 +19,17 @@ class PointHistoryTable {
         updateMillis: Long,
     ): PointHistory {
         Thread.sleep(Math.random().toLong() * 300L)
-        val history = PointHistory(
-            id = cursor++,
-            userId = id,
-            amount = amount,
-            type = transactionType,
-            timeMillis = updateMillis,
-        )
+        val history =
+            PointHistory(
+                id = cursor++,
+                userId = id,
+                amount = amount,
+                type = transactionType,
+                timeMillis = updateMillis,
+            )
         table.add(history)
         return history
     }
 
-    fun selectAllByUserId(userId: Long): List<PointHistory> {
-        return table.filter { it.userId == userId }
-    }
+    fun selectAllByUserId(userId: Long): List<PointHistory> = table.filter { it.userId == userId }
 }
