@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component
 
 /**
  * 해당 Table 클래스는 변경하지 않고 공개된 API 만을 사용해 데이터를 제어합니다.
+ *
+ * 동시성 이슈 발생시키기 위한 DB 테이블 역할
  */
 @Component
 class UserPointTable {
