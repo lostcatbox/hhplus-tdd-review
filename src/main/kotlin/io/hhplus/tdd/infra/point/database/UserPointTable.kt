@@ -1,10 +1,12 @@
-package io.hhplus.tdd.database
+package io.hhplus.tdd.infra.point.database
 
-import io.hhplus.tdd.point.UserPoint
+import io.hhplus.tdd.point.domain.UserPoint
 import org.springframework.stereotype.Component
 
 /**
  * 해당 Table 클래스는 변경하지 않고 공개된 API 만을 사용해 데이터를 제어합니다.
+ *
+ * 동시성 이슈 발생시키기 위한 DB 테이블 역할
  */
 @Component
 class UserPointTable {
@@ -15,7 +17,10 @@ class UserPointTable {
         return table[id] ?: UserPoint(id = id, point = 0, updateMillis = System.currentTimeMillis())
     }
 
-    fun insertOrUpdate(id: Long, amount: Long): UserPoint {
+    fun insertOrUpdate(
+        id: Long,
+        amount: Long,
+    ): UserPoint {
         Thread.sleep(Math.random().toLong() * 300L)
         val userPoint = UserPoint(id = id, point = amount, updateMillis = System.currentTimeMillis())
         table[id] = userPoint
